@@ -1,584 +1,269 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import Link from "next/link"
+import { Header } from "@/components/header"
+import { MedicalBackground } from "@/components/medical-background"
 import { useRouter } from "next/navigation"
-import { motion, useAnimation, useInView } from "framer-motion"
+import { motion } from "framer-motion"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { SmoothBackground } from "@/components/smooth-background"
-import { FloatingParticles } from "@/components/floating-particles"
-import { ArrowRight, Search, TrendingUp, Users, Briefcase, LightbulbIcon, HelpCircle } from "lucide-react"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { ArrowRight, Beaker, Brain, Cpu, Rocket, Leaf, Server, CircleDashed, Network, Users, Lightbulb, Coins } from "lucide-react"
 
 export default function HomePage() {
   const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState("")
-  const [isSearching, setIsSearching] = useState(false)
-
-  // Refs for scroll animations
-  const heroRef = useRef(null)
-  const featuredRef = useRef(null)
-  const howItWorksRef = useRef(null)
-  const faqRef = useRef(null)
-  const ctaRef = useRef(null)
-
-  // Check if elements are in view
-  const heroInView = useInView(heroRef, { once: true })
-  const featuredInView = useInView(featuredRef, { once: true, margin: "-100px" })
-  const howItWorksInView = useInView(howItWorksRef, { once: true, margin: "-100px" })
-  const faqInView = useInView(faqRef, { once: true, margin: "-100px" })
-  const ctaInView = useInView(ctaRef, { once: true, margin: "-100px" })
-
-  // Animation controls
-  const heroControls = useAnimation()
-  const featuredControls = useAnimation()
-  const howItWorksControls = useAnimation()
-  const faqControls = useAnimation()
-  const ctaControls = useAnimation()
-
-  // Handle search submission
-  const handleSearch = (e) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      setIsSearching(true)
-      router.push(`/explore?q=${encodeURIComponent(searchQuery)}`)
-    }
-  }
-
-  // FAQ data
-  const faqItems = [
-    {
-      question: "What is ScaleX4?",
-      answer:
-        "ScaleX4 is a social network and marketplace designed specifically for startups, investors, and innovators. Our platform helps startups connect with investors, find mentors, exchange technology, and access new markets.",
-    },
-    {
-      question: "How can ScaleX4 help my startup?",
-      answer:
-        "ScaleX4 helps your startup by providing access to investors, mentors, and potential business partners. You can showcase your products, find collaborators, access resources, and connect with others working in similar areas.",
-    },
-    {
-      question: "Is ScaleX4 free to use?",
-      answer:
-        "ScaleX4 offers a free basic membership with limited features. We also offer premium plans with additional benefits for startups and investors who want to maximize their experience on the platform.",
-    },
-    {
-      question: "How do I find investors on ScaleX4?",
-      answer:
-        "You can search for investors based on their investment preferences, sectors of interest, and typical investment size. Our platform makes it easy to connect with investors who are actively looking for opportunities in your industry.",
-    },
-  ]
-
-  // Create shooting stars effect
-  useEffect(() => {
-    const createShootingStars = () => {
-      const container = document.getElementById("shooting-stars-container")
-      if (!container) return
-
-      // Clear existing stars
-      while (container.firstChild) {
-        container.removeChild(container.firstChild)
-      }
-
-      // Create new stars
-      const starCount = Math.floor(window.innerWidth / 500) // Reduced density
-
-      for (let i = 0; i < starCount; i++) {
-        const star = document.createElement("div")
-        star.className = "shooting-star"
-
-        // Random position, size and delay
-        const size = Math.random() * 80 + 30
-        const posY = Math.random() * 100
-        const delay = Math.random() * 20
-        const duration = Math.random() * 3 + 3
-
-        star.style.width = `${size}px`
-        star.style.top = `${posY}%`
-        star.style.animationDelay = `${delay}s`
-        star.style.animationDuration = `${duration}s`
-
-        container.appendChild(star)
-      }
-    }
-
-    createShootingStars()
-    window.addEventListener("resize", createShootingStars)
-
-    return () => {
-      window.removeEventListener("resize", createShootingStars)
-    }
-  }, [])
-
-  // Trigger animations when elements come into view
-  useEffect(() => {
-    if (heroInView) {
-      heroControls.start({ opacity: 1, y: 0, transition: { duration: 0.5, staggerChildren: 0.1 } })
-    }
-    if (featuredInView) {
-      featuredControls.start({ opacity: 1, y: 0, transition: { duration: 0.5, staggerChildren: 0.1 } })
-    }
-    if (howItWorksInView) {
-      howItWorksControls.start({ opacity: 1, y: 0, transition: { duration: 0.5, staggerChildren: 0.1 } })
-    }
-    if (faqInView) {
-      faqControls.start({ opacity: 1, y: 0, transition: { duration: 0.5, staggerChildren: 0.1 } })
-    }
-    if (ctaInView) {
-      ctaControls.start({ opacity: 1, y: 0, transition: { duration: 0.5 } })
-    }
-  }, [
-    heroInView,
-    featuredInView,
-    howItWorksInView,
-    faqInView,
-    ctaInView,
-    heroControls,
-    featuredControls,
-    howItWorksControls,
-    faqControls,
-    ctaControls,
-  ])
 
   return (
-    <div className="flex flex-col min-h-screen relative">
-      <div className="fixed inset-0 theme-gradient -z-10"></div>
-      <div id="shooting-stars-container" className="fixed inset-0 pointer-events-none z-0"></div>
-      <SmoothBackground />
-      <FloatingParticles />
+    <div className="min-h-screen bg-background">
+      {/* Background layers */}
+      <div className="fixed inset-0 theme-gradient -z-10" />
+      <MedicalBackground />
 
-      {/* Navigation */}
-      <header className="border-b relative z-10 bg-background/80 backdrop-blur-sm">
-        <div className="container flex items-center justify-between py-4">
-          <div className="flex items-center gap-2">
-            <motion.div
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <TrendingUp className="h-6 w-6 text-primary" />
-            </motion.div>
-            <motion.span
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-xl font-bold"
-            >
-              ScaleX4
-            </motion.span>
-          </div>
-          <div className="hidden md:flex items-center gap-6">
-            <motion.div
-              initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-            >
-              <Link
-                href="/about"
-                className="text-sm font-medium hover:text-primary interactive-element px-3 py-2 rounded-md"
-              >
-                About
-              </Link>
-            </motion.div>
-            <motion.div
-              initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.3 }}
-            >
-              <Link
-                href="/explore"
-                className="text-sm font-medium hover:text-primary interactive-element px-3 py-2 rounded-md"
-              >
-                Explore
-              </Link>
-            </motion.div>
-            <motion.div
-              initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.4 }}
-            >
-              <Link
-                href="/contact"
-                className="text-sm font-medium hover:text-primary interactive-element px-3 py-2 rounded-md"
-              >
-                Contact
-              </Link>
-            </motion.div>
-            <motion.div
-              initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.5 }}
-            >
-              <Link
-                href="/faq"
-                className="text-sm font-medium hover:text-primary interactive-element px-3 py-2 rounded-md"
-              >
-                FAQ
-              </Link>
-            </motion.div>
-          </div>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <motion.div
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Link href="/login">
-                <Button variant="outline" size="sm">
-                  Log in
-                </Button>
-              </Link>
-            </motion.div>
-            <motion.div
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <Link href="/signup">
-                <Button size="sm">Sign up</Button>
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </header>
+      {/* Content layers */}
+      <div className="relative z-10">
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          {/* Hero Section */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center py-20"
+          >
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Welcome to <span className="text-primary">ScaleX4</span>
+              <span className="text-3xl md:text-4xl mt-4 block">The Hub for Deep Science & Deep Tech Innovation</span>
+            </h1>
+          </motion.section>
 
-      <main className="flex-1 relative z-10">
-        {/* Hero Section */}
-        <motion.section
-          ref={heroRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={heroControls}
-          className="relative py-20 bg-background/80 backdrop-blur-sm overflow-hidden"
-        >
-          <div className="container flex flex-col items-center text-center relative z-10">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-3xl"
-            >
-              Where Startups, Investors & Innovators Connect
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 text-lg text-muted-foreground max-w-2xl"
-            >
-              Discover opportunities, exchange technology, seek mentorship, and connect with the right people to grow
-              your venture.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-10 flex flex-col sm:flex-row gap-4"
-            >
-              <Link href="/signup?role=startup">
-                <Button size="lg" className="w-full sm:w-auto hover-glow glow">
-                  Join as a Startup
-                </Button>
-              </Link>
-              <Link href="/signup?role=investor">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto hover-glow">
-                  Join as an Investor
-                </Button>
-              </Link>
-              <Link href="/explore">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto hover-glow">
-                  Explore Startups
-                </Button>
-              </Link>
-            </motion.div>
-          </div>
-        </motion.section>
-
-        {/* Search Bar */}
-        <section className="py-12 border-b bg-background/80 backdrop-blur-sm">
-          <div className="container">
-            <div className="max-w-3xl mx-auto">
-              <form onSubmit={handleSearch} className="flex items-center">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-                  <input
-                    type="text"
-                    placeholder="Search startups by name, category, or funding status..."
-                    className="w-full pl-10 pr-4 py-3 rounded-l-lg border focus:outline-none focus:ring-2 focus:ring-primary/50 bg-background"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </div>
-                <Button type="submit" className="rounded-l-none" disabled={isSearching}>
-                  {isSearching ? "Searching..." : "Search"}
-                </Button>
-              </form>
+          {/* About ScaleX4 Section */}
+          <section className="py-16 bg-muted/50">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-bold text-center mb-6">About ScaleX⁴</h2>
+              <p className="text-xl text-center max-w-3xl mx-auto text-muted-foreground">
+                ScaleX4 is the premier platform for Deep Science and Deep Tech startups, bringing together researchers, entrepreneurs, investors, and industry leaders. We provide a secure, high-impact ecosystem designed to accelerate innovation, collaboration, and commercialization in groundbreaking fields.
+              </p>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Featured Startups & Investors */}
-        <motion.section
-          ref={featuredRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={featuredControls}
-          className="py-16 bg-background/80 backdrop-blur-sm"
-        >
-          <div className="container">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: featuredInView ? 1 : 0, y: featuredInView ? 0 : 20 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl font-bold mb-8"
-            >
-              Featured Startups
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: featuredInView ? 1 : 0, y: featuredInView ? 0 : 20 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow gradient-border"
-                >
-                  <div className="p-6 bg-background">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <LightbulbIcon className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">TechInnovate {i}</h3>
-                        <p className="text-sm text-muted-foreground">AI & Machine Learning</p>
-                      </div>
-                    </div>
-                    <p className="text-sm mb-4">
-                      Revolutionizing business intelligence with AI-powered analytics and insights.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">Founded 2023</span>
-                      <Link href={`/startup/${i}`}>
-                        <Button variant="ghost" size="sm" className="gap-1 interactive-element">
-                          View Profile
-                          <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: featuredInView ? 1 : 0, y: featuredInView ? 0 : 20 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-3xl font-bold mt-16 mb-8"
-            >
-              Investor Spotlight
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: featuredInView ? 1 : 0, y: featuredInView ? 0 : 20 }}
-                  transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow gradient-border"
-                >
-                  <div className="p-6 bg-background">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Briefcase className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Venture Capital {i}</h3>
-                        <p className="text-sm text-muted-foreground">Early Stage, Series A</p>
-                      </div>
-                    </div>
-                    <p className="text-sm mb-4">
-                      Investing in disruptive technologies and innovative business models across sectors.
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">20+ Investments</span>
-                      <Link href={`/investor/${i}`}>
-                        <Button variant="ghost" size="sm" className="gap-1 interactive-element">
-                          View Profile
-                          <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.section>
-
-        {/* How It Works */}
-        <motion.section
-          ref={howItWorksRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={howItWorksControls}
-          className="py-16 bg-background/80 backdrop-blur-sm"
-        >
-          <div className="container">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: howItWorksInView ? 1 : 0, y: howItWorksInView ? 0 : 20 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl font-bold text-center mb-12"
-            >
-              How It Works
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <motion.div
+          {/* Who We Support Section */}
+          <section className="py-16">
+            <h2 className="text-3xl font-bold text-center mb-8">Who We Support</h2>
+            <p className="text-center text-xl mb-12">We empower startups in cutting-edge sectors, including:</p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: howItWorksInView ? 1 : 0, y: howItWorksInView ? 0 : 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
+              >
+                <Beaker className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Biotechnology & Life Sciences</h3>
+                <p className="text-muted-foreground">Genetics, Drug Discovery, MedTech, Cosmetics, AgriTech</p>
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="flex flex-col items-center text-center interactive-element p-6 rounded-lg hover-glow floating-element"
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
               >
-                <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <Users className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Step 1</h3>
-                <p>Register as Startup, Investor, or Distributor</p>
-              </motion.div>
-              <motion.div
+                <Brain className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">AI & Machine Learning</h3>
+                <p className="text-muted-foreground">Healthcare AI, Robotics, Automation</p>
+            </motion.div>
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: howItWorksInView ? 1 : 0, y: howItWorksInView ? 0 : 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex flex-col items-center text-center interactive-element p-6 rounded-lg hover-glow floating-element"
-                style={{ animationDelay: "0.5s" }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
               >
-                <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <LightbulbIcon className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Step 2</h3>
-                <p>Create Your Profile</p>
+                <Cpu className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Quantum Computing</h3>
+                <p className="text-muted-foreground">Advanced computing solutions</p>
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
+              >
+                <CircleDashed className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Advanced Materials</h3>
+                <p className="text-muted-foreground">Nanotech, Smart Materials, Sustainable Innovations</p>
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
+              >
+                <Leaf className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Sustainable Energy & Clean Tech</h3>
+                <p className="text-muted-foreground">Green Hydrogen, Carbon Capture, Nuclear Fusion</p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
+              >
+                <Rocket className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Aerospace & Space Tech</h3>
+                <p className="text-muted-foreground">Propulsion, Satellites, Space Exploration</p>
+            </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group col-span-full md:col-span-2 lg:col-span-1"
+              >
+                <Server className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Semiconductors & Microelectronics</h3>
+                <p className="text-muted-foreground">Chip Design, Photonics, Quantum Chips</p>
+                </motion.div>
+            </div>
+          </section>
+
+          {/* What We Offer Section */}
+          <section className="py-16">
+            <h2 className="text-3xl font-bold text-center mb-8">What We Offer</h2>
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
+              >
+                <Network className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Networking & Collaboration</h3>
+                <p className="text-muted-foreground">Connect with fellow deep science entrepreneurs, researchers, and mentors.</p>
+                </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
+              >
+                <Users className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Expert Mentorship</h3>
+                <p className="text-muted-foreground">Get guidance from industry leaders, scientists, and business strategists.</p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: howItWorksInView ? 1 : 0, y: howItWorksInView ? 0 : 20 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col items-center text-center interactive-element p-6 rounded-lg hover-glow floating-element"
-                style={{ animationDelay: "1s" }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
               >
-                <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <TrendingUp className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Step 3</h3>
-                <p>Connect, Chat, and Grow</p>
+                <Lightbulb className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Technology Sharing</h3>
+                <p className="text-muted-foreground">Find R&D partners and access cutting-edge research.</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="p-6 rounded-xl border bg-card hover:shadow-lg hover:border-primary/50 transition-all group"
+              >
+                <Coins className="h-12 w-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="text-xl font-semibold mb-3">Fundraising Opportunities</h3>
+                <p className="text-muted-foreground">Pitch to investors actively seeking high-impact deep tech startups.</p>
               </motion.div>
             </div>
-          </div>
-        </motion.section>
+          </section>
 
-        {/* FAQ Section */}
-        <motion.section
-          ref={faqRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={faqControls}
-          className="py-16 bg-background/80 backdrop-blur-sm"
-        >
-          <div className="container">
+          {/* Why Join Us Section */}
+          <section className="py-16">
+            <h2 className="text-3xl font-bold text-center mb-8">Why Join Us?</h2>
+            <div className="max-w-4xl mx-auto space-y-4">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: faqInView ? 1 : 0, y: faqInView ? 0 : 20 }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
-              className="max-w-3xl mx-auto text-center mb-12"
+                className="flex items-center gap-4 p-4 rounded-lg border bg-card"
             >
-              <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
-              <p className="text-muted-foreground">Find answers to common questions about ScaleX4</p>
+                <div className="text-2xl">✔</div>
+                <p className="text-lg">A Confidential & Trust-Based Ecosystem</p>
             </motion.div>
-
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: faqInView ? 1 : 0, y: faqInView ? 0 : 20 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="max-w-3xl mx-auto"
-            >
-              <Accordion type="single" collapsible className="border rounded-lg overflow-hidden">
-                {faqItems.map((item, index) => (
-                  <AccordionItem key={index} value={`item-${index}`}>
-                    <AccordionTrigger className="px-6 hover:no-underline hover:bg-muted/50 text-primary hover:text-primary">
-                      {item.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-muted-foreground">{item.answer}</AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="flex items-center gap-4 p-4 rounded-lg border bg-card"
+              >
+                <div className="text-2xl">✔</div>
+                <p className="text-lg">Curated Connections with Investors & Industry Leaders</p>
             </motion.div>
-
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: faqInView ? 1 : 0, y: faqInView ? 0 : 20 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-center mt-8"
-            >
-              <Link href="/faq">
-                <Button variant="outline" className="gap-2">
-                  <HelpCircle className="h-4 w-4" />
-                  View All FAQs
-                </Button>
-              </Link>
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex items-center gap-4 p-4 rounded-lg border bg-card"
+              >
+                <div className="text-2xl">✔</div>
+                <p className="text-lg">Exclusive Deep Science & Deep Tech Community</p>
             </motion.div>
           </div>
-        </motion.section>
+          </section>
 
-        {/* CTA Footer */}
+          {/* CTA Section */}
         <motion.section
-          ref={ctaRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={ctaControls}
-          className="py-16 theme-gradient text-white"
-        >
-          <div className="container text-center">
-            <motion.h2
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: ctaInView ? 1 : 0, y: ctaInView ? 0 : 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-3xl font-bold mb-4"
-            >
-              Ready to Scale Your Startup?
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: ctaInView ? 1 : 0, y: ctaInView ? 0 : 20 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-lg mb-8 max-w-2xl mx-auto"
-            >
-              Join our community of innovators, investors, and industry experts today.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: ctaInView ? 1 : 0, y: ctaInView ? 0 : 20 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Link href="/signup">
-                <Button size="lg" variant="secondary" className="animate-pulse-theme glow">
-                  Sign Up Now
+            className="text-center py-20"
+          >
+            <h2 className="text-3xl font-bold mb-6">Be Part of the Future of Innovation</h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              If you're building the next breakthrough in deep science or deep tech, this is where you belong. Join ScaleX4 today!
+            </p>
+            <Button size="lg" onClick={() => router.push("/signup")} className="text-lg px-8">
+              Sign Up Now <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-              </Link>
-            </motion.div>
-          </div>
         </motion.section>
-      </main>
 
-      <footer className="border-t py-6 relative z-10 bg-background/80 backdrop-blur-sm">
-        <div className="container flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <TrendingUp className="h-5 w-5 text-primary" />
-            <span className="font-semibold">ScaleX4</span>
+          {/* Footer with Rights */}
+          <footer className="border-t mt-20 py-8">
+            <div className="container mx-auto px-4">
+              <div className="grid md:grid-cols-4 gap-8">
+                <div>
+                  <h3 className="font-semibold mb-4">Company</h3>
+                  <ul className="space-y-2">
+                    <li><Link href="/about" className="text-muted-foreground hover:text-primary">About</Link></li>
+                    <li><Link href="/careers" className="text-muted-foreground hover:text-primary">Careers</Link></li>
+                    <li><Link href="/contact" className="text-muted-foreground hover:text-primary">Contact</Link></li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-4">Legal</h3>
+                  <ul className="space-y-2">
+                    <li><Link href="/privacy" className="text-muted-foreground hover:text-primary">Privacy Policy</Link></li>
+                    <li><Link href="/terms" className="text-muted-foreground hover:text-primary">Terms of Service</Link></li>
+                    <li><Link href="/security" className="text-muted-foreground hover:text-primary">Security</Link></li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-4">Resources</h3>
+                  <ul className="space-y-2">
+                    <li><Link href="/blog" className="text-muted-foreground hover:text-primary">Blog</Link></li>
+                    <li><Link href="/docs" className="text-muted-foreground hover:text-primary">Documentation</Link></li>
+                    <li><Link href="/support" className="text-muted-foreground hover:text-primary">Support</Link></li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-4">Connect</h3>
+                  <ul className="space-y-2">
+                    <li><Link href="/twitter" className="text-muted-foreground hover:text-primary">Twitter</Link></li>
+                    <li><Link href="/linkedin" className="text-muted-foreground hover:text-primary">LinkedIn</Link></li>
+                    <li><Link href="/github" className="text-muted-foreground hover:text-primary">GitHub</Link></li>
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-8 pt-8 border-t text-center text-muted-foreground">
+                <p>© {new Date().getFullYear()} ScaleX4. All rights reserved.</p>
+                <p className="mt-2 text-sm">Patents Pending. ScaleX4 and the ScaleX4 logo are trademarks of ScaleX4, Inc.</p>
           </div>
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} ScaleX4 Hyderabad. All rights reserved.
-          </p>
         </div>
       </footer>
+        </main>
+      </div>
     </div>
   )
 }

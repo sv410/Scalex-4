@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "ScaleX4 - Startup Network",
   description: "Connect with startups, investors, and innovators",
-    generator: 'v0.dev'
+    generator:'Scalex4.dev'
 }
 
 export default function RootLayout({
